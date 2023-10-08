@@ -160,13 +160,13 @@ async def airdrop(update, context: ContextTypes.DEFAULT_TYPE):
         await bot.sendMessage(
             chat_id=groupId,
             parse_mode="HTML",
-            text = f'{userName}, you have successfully registered, you can go to https://x6nge.com to get the tokens for the ongoing Airdrop'
+            text = f'{userName}, you have successfully registered, you can go to <a href="https://x6nge.com">X6NGE</a> to get the tokens for the ongoing Airdrop'
         )
     elif isvalid == "user_register":
         await bot.sendMessage(
             chat_id=groupId,
             parse_mode="HTML",
-            text = f'{userName}, you have already registered previously, you can go to https://x6nge.com to get the Airdrop tokens.'
+            text = f'{userName}, you have already registered previously, you can go to <a href="https://x6nge.com">X6NGE</a> to get the <b>Airdrop tokens.</b>'
         )
     elif isvalid == "user_register_paid":
         await bot.sendMessage(
@@ -193,7 +193,7 @@ async def newUsers(update, context: ContextTypes.DEFAULT_TYPE):
     await bot.sendMessage(
         chat_id=groupId,
         parse_mode="HTML",
-        text = f"<b>¡Bienvenid@ {userName} a la comunidad de TheKeyOfTrue!. Acceda a https://x6nge.com para el Airdrop</b>."
+        text = f'<b>¡Welcome {userName} to The Key of True! community. You can access <a href="https://x6nge.com">X6NGE</a> to obtain the tokens for the ongoing Airdrop</b>.'
     )
 
 if __name__ == "__main__":
