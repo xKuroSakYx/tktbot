@@ -173,6 +173,7 @@ async def airdrop(update, context: ContextTypes.DEFAULT_TYPE):
             parse_mode="HTML",
             text = f'{userName}, usted ya ha recibido los tokens del Airdrop.'
         )
+
 async def newUsers(update, context: ContextTypes.DEFAULT_TYPE):
     bot = context.bot
     update_msg = getattr(update, "message", None) #get info of message
@@ -188,7 +189,7 @@ async def newUsers(update, context: ContextTypes.DEFAULT_TYPE):
     await bot.sendMessage(
         chat_id=groupId,
         parse_mode="HTML",
-        text = f"<b>¡Bienvenid@ {userName} a la comunidad de TheKeyOfTrue!. Acceda a https://x6nge.com para el Airdrop</b>. {welcomeMessage}"
+        text = f"<b>¡Bienvenid@ {userName} a la comunidad de TheKeyOfTrue!. Acceda a https://x6nge.com para el Airdrop</b>."
     )
 
 if __name__ == "__main__":
