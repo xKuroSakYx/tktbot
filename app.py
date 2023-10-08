@@ -18,7 +18,6 @@ welcomeMessage = '\n\n[Establece un mensaje de bienvenida con el comando /change
 rudeList = ['imbecil', 'Imbecil', 'Ignorante', 'ignorante', 'baboso', 'Baboso', 'Estupido', 'estupido', 'gay', 'Gay'
             ,'hpta', 'HPTA'
             ]
-OWNERCHATID = -4072756889
 
 eventos = 'Eventos: \nAgéndate en este enlace: https://app.interacpedia.com/mass-events'
 
@@ -33,6 +32,8 @@ param = config("serverdata")
 TOKEN = param['token']
 MODE = param['mode']
 SERVER_LINK = param['server']
+WEBURL = f'https://{SERVER_LINK}/{TOKEN}'
+OWNERCHATID = [-4072756889, 1958469014]
 
 #TOKEN = os.getenv("TOKEN") #create an environment variable. pwershell = $env:TOKEN="token code", cmd = set TOKEN=token code
 #MODE = os.getenv('MODE') #for know if is running in cmd or in web heroku
@@ -46,7 +47,7 @@ if MODE == 'dev':#is running in cmd
 elif MODE == 'prod': #is running on web, heroku
     def run(updater):
         PORT = int(os.environ.get("PORT", "8443")) #assign a port for bot execution
-        updater.run_webhook(listen="0.0.0.0", port= PORT, url_path=TOKEN, webhook_url=f'https://{SERVER_LINK}/{TOKEN}')
+        updater.run_webhook(listen="0.0.0.0", port= PORT, url_path=TOKEN, webhook_url=WEBURL)
         #updater.start_webhook(listen="0.0.0.0", port= PORT, url_path=TOKEN)
         #updater.bot.set_webhook(f'https://{SERVER_LINK}/{TOKEN}')
 else:
@@ -105,7 +106,7 @@ def deleteMessage(bot, chatId, messageId, userName): #delete messages
 
 async def echo(update, context: ContextTypes.DEFAULT_TYPE):
     groupId = update.effective_chat.id
-    if OWNERCHATID != int(groupId):
+    if not int(groupId) in OWNERCHATID:
         return
     
     #print(update)
@@ -142,10 +143,10 @@ async def echo(update, context: ContextTypes.DEFAULT_TYPE):
 
 async def airdrop(update, context: ContextTypes.DEFAULT_TYPE):
     groupId = update.effective_chat.id
-    if OWNERCHATID != int(groupId):
+    if not int(groupId) in OWNERCHATID:
         print("no son iguales ")
         return
-
+    
     bot = context.bot
     update_msg = getattr(update, "message", None) #get info of message
     msg_id = update_msg.message_id #get recently message id
@@ -175,10 +176,13 @@ async def airdrop(update, context: ContextTypes.DEFAULT_TYPE):
         )
 
 async def newUsers(update, context: ContextTypes.DEFAULT_TYPE):
+    groupId = update.effective_chat.id
+    if not int(groupId) in OWNERCHATID:
+        print("no son iguales ")
+        return
     bot = context.bot
     update_msg = getattr(update, "message", None) #get info of message
     msg_id = update_msg.message_id #get recently message id
-    groupId = update.effective_chat.id
     user_id = update.effective_user['id'] #get user id
     username = update.effective_user['username']
     userName = update.effective_user['first_name']
