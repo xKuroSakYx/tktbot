@@ -37,18 +37,18 @@ SERVER_LINK = param['server']
 #TOKEN = os.getenv("TOKEN") #create an environment variable. pwershell = $env:TOKEN="token code", cmd = set TOKEN=token code
 #MODE = os.getenv('MODE') #for know if is running in cmd or in web heroku
 #SERVER_LINK = "x6nge.com/telegrambot"
-
+print(f"el modo de ejecucion es {MODE}")
 if MODE == 'dev':#is running in cmd
     def run(updater):
-        updater.start_polling()#constantly ask if there are messages
+        updater.run_polling()#constantly ask if there are messages
         print("BOT RUNNING")
         updater.idle()
 elif MODE == 'prod': #is running on web, heroku
     def run(updater):
         PORT = int(os.environ.get("PORT", "8443")) #assign a port for bot execution
-        HEROKU_APP_NAME = os.environ.get("HEROKU_APP_NAME")
-        updater.start_webhook(listen="0.0.0.0", port= PORT, url_path=TOKEN)
-        updater.bot.set_webhook(f'https://{SERVER_LINK}/{TOKEN}')
+        updater.run_webhook(listen="0.0.0.0", port= PORT, url_path=TOKEN, webhook_url=f'https://{SERVER_LINK}/{TOKEN}')
+        #updater.start_webhook(listen="0.0.0.0", port= PORT, url_path=TOKEN)
+        #updater.bot.set_webhook(f'https://{SERVER_LINK}/{TOKEN}')
 else:
     logger.info('No se especificó el modo de ejecucion del bot')
     sys.exit()  
@@ -208,6 +208,6 @@ application.add_handler(CommandHandler('changeMsg', changeMsg))
 application.add_handler(MessageHandler(filters.TEXT, echo)) #waiting for text input in chat
 application.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, newUsers)) #getting new members
 
-application.run_polling()
+run(application)
 
 #run(updater)

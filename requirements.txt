@@ -27,6 +27,7 @@ pynput==1.6.8
 pyTelegramBotAPI==3.7.1
 python-decouple==3.3
 python-telegram-bot==12.8
+python-telegram-bot[webhooks]==0.25.0
 pywin32-ctypes==0.2.0
 requests==2.24.0
 scapy==2.4.3
