@@ -160,19 +160,19 @@ async def airdrop(update, context: ContextTypes.DEFAULT_TYPE):
         await bot.sendMessage(
             chat_id=groupId,
             parse_mode="HTML",
-            text = f'{userName}, usted se ha registrado correctamente para poder obtener los tokens del Airdrop.'
+            text = f'{userName}, you have successfully registered, you can go to https://x6nge.com to get the tokens for the ongoing Airdrop'
         )
     elif isvalid == "user_register":
         await bot.sendMessage(
             chat_id=groupId,
             parse_mode="HTML",
-            text = f'{userName}, usted ya se ha registrado previamente, puede acceder a https://x6nge.com para obtener los tokens del Airdrop.'
+            text = f'{userName}, you have already registered previously, you can go to https://x6nge.com to get the Airdrop tokens.'
         )
     elif isvalid == "user_register_paid":
         await bot.sendMessage(
             chat_id=groupId,
             parse_mode="HTML",
-            text = f'{userName}, usted ya ha recibido los tokens del Airdrop.'
+            text = f'{userName}, you have already received the Airdrop tokens.'
         )
 
 async def newUsers(update, context: ContextTypes.DEFAULT_TYPE):
