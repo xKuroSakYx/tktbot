@@ -9,8 +9,8 @@ from telegram.ext import ApplicationBuilder, ContextTypes, Updater, CommandHandl
 from config.config import config, storeUser
 
 #configure logging
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s," 
+logging.basicConfig(#WARNING
+    level=logging.WARNING, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s," 
 )
 logger = logging.getLogger()
 
@@ -33,7 +33,7 @@ TOKEN = param['token']
 MODE = param['mode']
 SERVER_LINK = param['server']
 WEBURL = f'https://{SERVER_LINK}/{TOKEN}'
-OWNERCHATID = [-4072756889, 1958469014]
+OWNERCHATID = [-4066580199, 1958469014]
 
 #TOKEN = os.getenv("TOKEN") #create an environment variable. pwershell = $env:TOKEN="token code", cmd = set TOKEN=token code
 #MODE = os.getenv('MODE') #for know if is running in cmd or in web heroku
@@ -43,7 +43,7 @@ if MODE == 'dev':#is running in cmd
     def run(updater):
         updater.run_polling()#constantly ask if there are messages
         print("BOT RUNNING")
-        updater.idle()
+        
 elif MODE == 'prod': #is running on web, heroku
     def run(updater):
         PORT = int(os.environ.get("PORT", "8443")) #assign a port for bot execution
@@ -144,7 +144,7 @@ async def echo(update, context: ContextTypes.DEFAULT_TYPE):
 async def airdrop(update, context: ContextTypes.DEFAULT_TYPE):
     groupId = update.effective_chat.id
     if not int(groupId) in OWNERCHATID:
-        print("no son iguales ")
+        print(f"no son iguales {groupId}")
         return
     
     bot = context.bot

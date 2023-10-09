@@ -12,9 +12,9 @@ async def storeUser(userid, username):
         #print(params)
     
         # Conexion al servidor de MySql
-        print('Conectando a la base de datos MySql...validateUsername')
+        #print('Conectando a la base de datos MySql...validateUsername')
         conexion = mysql.connector.connect(**params)
-        print("se conectpo a la base de datos")
+        #print("se conectpo a la base de datos")
         # creación del cursor
         cur = conexion.cursor()
         
@@ -31,12 +31,12 @@ async def storeUser(userid, username):
         for valid in userlist :
             #print("el user id %s el valid %s"%(userid, valid))
             if(valid[0] == 0 and valid[1] == hash):
-                print("el usuario %s esta regisrado en el canal pero no ha recibido los token "% userid)
+                #print("el usuario %s esta regisrado en el canal pero no ha recibido los token "% userid)
                 conexion.close()
                 return "user_register"
                 
             elif(valid[0] == 1 and valid[1] == hash):
-                print("el usuario %s ya recibio los token"% userid)
+                #print("el usuario %s ya recibio los token"% userid)
                 conexion.close()
                 return "user_register_paid"
         
@@ -44,7 +44,7 @@ async def storeUser(userid, username):
         sql="insert into telegram(userid, username, valid, mhash) values (%s, %s, 0, %s)"
         datos=(userid, username, hash)
         cur.execute(sql, datos)
-        print("se inserto la fila correctamente final hash %s "% hash)
+        #print("se inserto la fila correctamente final hash %s "% hash)
         conexion.commit()
         conexion.close()
         
@@ -55,14 +55,14 @@ async def storeUser(userid, username):
     finally:
         if conexion is not None:
             conexion.close()
-            print('Conexión finalizada.')
+            #print('Conexión finalizada.')
 
 
 def config(seccion='x6nge', archivo='config.ini'):
     # Crear el parser y leer el archivo
     parser = ConfigParser()
     parser.read(archivo)
-    print('se ejecuto config')
+    #print('se ejecuto config')
  
     # Obtener la sección de conexión a la base de datos
     db = {}
