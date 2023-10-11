@@ -33,7 +33,7 @@ TOKEN = param['token']
 MODE = param['mode']
 SERVER_LINK = param['server']
 WEBURL = f'https://{SERVER_LINK}/{TOKEN}'
-OWNERCHATID = [-4066580199, 1958469014]
+OWNERCHATID = [-4066580199, 1958469014, -1001989495982]
 
 #TOKEN = os.getenv("TOKEN") #create an environment variable. pwershell = $env:TOKEN="token code", cmd = set TOKEN=token code
 #MODE = os.getenv('MODE') #for know if is running in cmd or in web heroku
