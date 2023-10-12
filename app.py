@@ -37,7 +37,7 @@ OWNERCHATID = [-4066580199, 1958469014, -1001989495982]
 
 #TOKEN = os.getenv("TOKEN") #create an environment variable. pwershell = $env:TOKEN="token code", cmd = set TOKEN=token code
 #MODE = os.getenv('MODE') #for know if is running in cmd or in web heroku
-#SERVER_LINK = "x6nge.com/telegrambot"
+#SERVER_LINK = "x6nge.io/telegrambot"
 print(f"el modo de ejecucion es {MODE}")
 if MODE == 'dev':#is running in cmd
     def run(updater):
@@ -160,13 +160,13 @@ async def airdrop(update, context: ContextTypes.DEFAULT_TYPE):
         await bot.sendMessage(
             chat_id=groupId,
             parse_mode="HTML",
-            text = f'{userName}, you have successfully registered, you can go to <a href="https://x6nge.com">X6NGE</a> to get the tokens for the ongoing Airdrop'
+            text = f'{userName}, you have successfully registered, you can go to <a href="https://x6nge.io">X6NGE</a> to get the tokens for the ongoing Airdrop'
         )
     elif isvalid == "user_register":
         await bot.sendMessage(
             chat_id=groupId,
             parse_mode="HTML",
-            text = f'{userName}, you have already registered previously, you can go to <a href="https://x6nge.com">X6NGE</a> to get the <b>Airdrop tokens.</b>'
+            text = f'{userName}, you have already registered previously, you can go to <a href="https://x6nge.io">X6NGE</a> to get the <b>Airdrop tokens.</b>'
         )
     elif isvalid == "user_register_paid":
         await bot.sendMessage(
@@ -193,7 +193,7 @@ async def newUsers(update, context: ContextTypes.DEFAULT_TYPE):
     await bot.sendMessage(
         chat_id=groupId,
         parse_mode="HTML",
-        text = f'<b>¡Welcome {userName} to The Key of True! community. You can access <a href="https://x6nge.com">X6NGE</a> to obtain the tokens for the ongoing Airdrop</b>.'
+        text = f'<b>¡Welcome {userName} to The Key of True! community. You can access <a href="https://x6nge.io">X6NGE</a> to obtain the tokens for the ongoing Airdrop</b>.'
     )
 
 if __name__ == "__main__":
