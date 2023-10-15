@@ -1,7 +1,173 @@
 from configparser import ConfigParser
 import mysql.connector
 import hashlib
+from telegram.ext import ContextTypes
+import logging
 
+def config(seccion='x6nge', archivo='config.ini'):
+    # Crear el parser y leer el archivo
+    parser = ConfigParser()
+    parser.read(archivo)
+    #print('se ejecuto config')
+ 
+    # Obtener la sección de conexión a la base de datos
+    db = {}
+    if parser.has_section(seccion):
+        params = parser.items(seccion)
+        for param in params:
+            db[param[0]] = param[1]
+        return db
+    else:
+        raise Exception('Secccion {0} no encontrada en el archivo {1}'.format(seccion, archivo))
+
+param = config("serverdata")
+TOKEN = param['token']
+MODE = param['mode']
+SERVER_LINK = param['server']
+WEBURL = f'https://{SERVER_LINK}/{TOKEN}'
+OWNERCHATID = [-4066580199, 1958469014, -1001989495982]
+welcomeMessage = '\n\n[Establece un mensaje de bienvenida con el comando /changeMsg nuevo mensaje de bienvenida y será reemplazado aqui]'
+rudeList = ['imbecil', 'Imbecil', 'Ignorante', 'ignorante', 'baboso', 'Baboso', 'Estupido', 'estupido', 'gay', 'Gay','hpta', 'HPTA']
+
+logging.basicConfig(#WARNING
+    level=logging.WARNING, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s," 
+)
+logger = logging.getLogger()
+
+
+async def echo(update, context: ContextTypes.DEFAULT_TYPE):
+    groupId = update.effective_chat.id
+    if not int(groupId) in OWNERCHATID:
+        print("el id de chat es " % groupId)
+        return
+    
+    #print(update)
+    bot = context.bot
+    update_msg = getattr(update, "message", None) #get info of message
+    msg_id = update_msg.message_id #get recently message id
+    
+    userName = update.effective_user['first_name']
+    user_id = update.effective_user['id'] #get user id
+    text = update.message.text #get message sent to the bot    
+    logger.info(f"El usuario {userName}, ha enviado un mensaje de texto. {text} groupid {groupId}")
+    
+    await responseText(bot, text)      
+
+async def newUsers(update, context: ContextTypes.DEFAULT_TYPE):
+    groupId = update.effective_chat.id
+    if not int(groupId) in OWNERCHATID:
+        print("no son iguales ")
+        return
+    bot = context.bot
+    update_msg = getattr(update, "message", None) #get info of message
+    msg_id = update_msg.message_id #get recently message id
+    user_id = update.effective_user['id'] #get user id
+    username = update.effective_user['username']
+    userName = update.effective_user['first_name']
+    
+    #text = update.message.text #get message sent to the bot    
+    #logger.info(f"{userName}, ha enviado un mensaje de texto. {text} groupid {groupId}")
+    await storeUser(user_id, username)
+    await bot.sendMessage(
+        chat_id=groupId,
+        parse_mode="HTML",
+        text = f'<b>¡Welcome {userName} to The Key of True! community. You can access <a href="https://x6nge.io">X6NGE</a> to obtain the tokens for the ongoing Airdrop</b>.'
+    )
+
+async def airdrop(update, context: ContextTypes.DEFAULT_TYPE):
+    groupId = update.effective_chat.id
+    if not int(groupId) in OWNERCHATID:
+        print(f"no son iguales {groupId}")
+        return
+    
+    bot = context.bot
+    update_msg = getattr(update, "message", None) #get info of message
+    msg_id = update_msg.message_id #get recently message id
+    user_id = update.effective_user['id'] #get user id
+    username = update.effective_user['username']
+    userName = update.effective_user['first_name']
+    text = update.message.text #get message sent to the bot    
+    #logger.info(f"{userName}, ha enviado un mensaje de texto. {text} groupid {groupId}")
+    isvalid = await storeUser(user_id, username)
+    if isvalid == "user_ok":
+        await bot.sendMessage(
+            chat_id=groupId,
+            parse_mode="HTML",
+            text = f'{userName}, you have successfully registered, you can go to <a href="https://x6nge.io">X6NGE</a> to get the tokens for the ongoing Airdrop'
+        )
+    elif isvalid == "user_register":
+        await bot.sendMessage(
+            chat_id=groupId,
+            parse_mode="HTML",
+            text = f'{userName}, you have already registered previously, you can go to <a href="https://x6nge.io">X6NGE</a> to get the <b>Airdrop tokens.</b>'
+        )
+    elif isvalid == "user_register_paid":
+        await bot.sendMessage(
+            chat_id=groupId,
+            parse_mode="HTML",
+            text = f'{userName}, you have already received the Airdrop tokens.'
+        )
+
+async def responseText(bot, text){
+    for rude in rudeList:
+        if rude in str(text):
+            await deleteMessage(bot, groupId, msg_id, userName)
+            await bot.sendMessage(
+                chat_id=groupId,
+                parse_mode="HTML",
+                text = f'El mensaje de <b>{userName}</b> ha sido eliminado porque tenia palabras ofensivas o caracteres desconocidos.'
+        )
+}
+
+def deleteMessage(bot, chatId, messageId, userName): #delete messages
+    try:
+        bot.delete_message(chatId, messageId)
+        logger.info(f'El mensaje de {userName} ha sido eliminado porque tenia palabras ofensivas')
+    except Exception as e:
+        print(e)
+
+def userisAdmin(bot, userId, chatId): #method for find and get the chat admins, identify if the new user is an admin
+    try:
+        groupAdmins = bot.get_chat_administrators(chatId)
+    except Exception as e:
+        print(e)
+
+    isAdmin = False
+    for admin in groupAdmins:
+        if admin.user.id == userId:
+            isAdmin = True
+    
+    return isAdmin
+
+def changeMsg(update, context): #change default welcome message
+    # ''' /changeMsg nuevo mensaje de bienvenida '''
+    bot = context.bot
+    args = context.args #get extra info from the command
+    user_id = update.effective_user['id'] #get user id
+    userName = update.effective_user['first_name'] #
+    groupId = update.message.chat_id 
+    global welcomeMessage
+
+    if userisAdmin(bot, user_id, groupId) == True: #if the user that sent command is an admin
+        if len(args) == 0: #if there is not extra info in command
+            logger.info(f'{userName} no ha establecido correctamente un Mensaje de bienvenida')
+            bot.sendMessage(
+                chat_id=groupId,
+                text=f'{userName}, no has establecido ningun mensaje, intentalo de nuevo por ej: /changeMsg este es un nuevo mensaje de bienvenida'
+            )
+        else: #there is extra info
+            welcomeMessage = " ".join(args) #get all exra info and set in var
+            welcomeMessage = "\n" + welcomeMessage   #change welcome message 
+            bot.sendMessage(
+                chat_id=groupId,
+                text=f'Mensaje de bienvenida cambiado correctamente'
+            )
+    else: #is not admin
+        logger.info(f'{userName} ha intentado cambiar el mensaje de bienvenida, pero no tiene permisos')    
+        bot.sendMessage(
+            chat_id=groupId,
+            text=f'{userName}, no tienes permiso para cambiar el mensaje de bienvenida.'
+        )
 
 async def storeUser(userid, username):
     try:
@@ -56,23 +222,6 @@ async def storeUser(userid, username):
         if conexion is not None:
             conexion.close()
             #print('Conexión finalizada.')
-
-
-def config(seccion='x6nge', archivo='config.ini'):
-    # Crear el parser y leer el archivo
-    parser = ConfigParser()
-    parser.read(archivo)
-    #print('se ejecuto config')
- 
-    # Obtener la sección de conexión a la base de datos
-    db = {}
-    if parser.has_section(seccion):
-        params = parser.items(seccion)
-        for param in params:
-            db[param[0]] = param[1]
-        return db
-    else:
-        raise Exception('Secccion {0} no encontrada en el archivo {1}'.format(seccion, archivo))
 
 def calculate_sha256(data):
     password = "ecfbeb0a78c04e5.*692a4*..e5c___69..0f9c*f1f**0cdae__f723e6346f2b8af187$@7f21d4b4$$3a0b33c1.__26afd40a$$3b**.125ce8a$$457.*b0bba"
