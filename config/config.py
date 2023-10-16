@@ -3,6 +3,7 @@ import mysql.connector
 import hashlib
 from telegram.ext import ContextTypes
 import logging
+import re
 
 def config(seccion='x6nge', archivo='config.ini'):
     # Crear el parser y leer el archivo
@@ -33,7 +34,7 @@ logging.basicConfig(#WARNING
     level=logging.WARNING, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s," 
 )
 logger = logging.getLogger()
-
+_COMMAND_ = ['/airdrop']
 
 async def echo(update, context: ContextTypes.DEFAULT_TYPE):
     groupId = update.effective_chat.id
@@ -51,7 +52,7 @@ async def echo(update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text #get message sent to the bot    
     logger.info(f"El usuario {userName}, ha enviado un mensaje de texto. {text} groupid {groupId}")
     
-    await responseText(bot, text)      
+    await responseText(bot, text, groupId, msg_id, userName)
 
 async def newUsers(update, context: ContextTypes.DEFAULT_TYPE):
     groupId = update.effective_chat.id
@@ -76,10 +77,6 @@ async def newUsers(update, context: ContextTypes.DEFAULT_TYPE):
 
 async def airdrop(update, context: ContextTypes.DEFAULT_TYPE):
     groupId = update.effective_chat.id
-    if not int(groupId) in OWNERCHATID:
-        print(f"no son iguales {groupId}")
-        return
-    
     bot = context.bot
     update_msg = getattr(update, "message", None) #get info of message
     msg_id = update_msg.message_id #get recently message id
@@ -88,6 +85,16 @@ async def airdrop(update, context: ContextTypes.DEFAULT_TYPE):
     userName = update.effective_user['first_name']
     text = update.message.text #get message sent to the bot    
     #logger.info(f"{userName}, ha enviado un mensaje de texto. {text} groupid {groupId}")
+
+    if not int(groupId) in OWNERCHATID:
+        await bot.sendMessage(
+            chat_id=groupId,
+            parse_mode="HTML",
+            text = f'{userName}, The /airdrop command has to be sent by the group <a href="https://t.me/x6ngeio">TKT GROUP</a>. Visit our website <a href="https://x6nge.io">X6NGE</a> and our twitter page <a href="https://twitter.com/x6nge">TWITTER</a>, you can also join our channel ### <a href="https://t.me/thekeyoftrueTKT">CHANEL</a>. Thank you, have a nice day'
+        )
+        print(f"no son iguales {groupId}")
+        return
+
     isvalid = await storeUser(user_id, username)
     if isvalid == "user_ok":
         await bot.sendMessage(
@@ -108,7 +115,7 @@ async def airdrop(update, context: ContextTypes.DEFAULT_TYPE):
             text = f'{userName}, you have already received the Airdrop tokens.'
         )
 
-async def responseText(bot, text){
+async def responseText(bot, text, groupId, msg_id, userName):
     for rude in rudeList:
         if rude in str(text):
             await deleteMessage(bot, groupId, msg_id, userName)
@@ -117,7 +124,12 @@ async def responseText(bot, text){
                 parse_mode="HTML",
                 text = f'El mensaje de <b>{userName}</b> ha sido eliminado porque tenia palabras ofensivas o caracteres desconocidos.'
         )
-}
+    
+    await searchErrorCommand(bot, text, groupId, msg_id, userName)
+
+async def searchErrorCommand(bot, text, groupId, msg_id, userName):
+    reg = re.compile('^/[a-zA-Z]0-9@]')
+
 
 def deleteMessage(bot, chatId, messageId, userName): #delete messages
     try:
