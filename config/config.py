@@ -38,8 +38,9 @@ _COMMAND_ = ['/airdrop']
 
 async def echo(update, context: ContextTypes.DEFAULT_TYPE):
     groupId = update.effective_chat.id
+    userName = update.effective_user['first_name']
     if not int(groupId) in OWNERCHATID:
-        print("el id de chat es " % groupId)
+        print("el id de chat es %s username %s" % (groupId, userName))
         return
     
     #print(update)
@@ -47,7 +48,6 @@ async def echo(update, context: ContextTypes.DEFAULT_TYPE):
     update_msg = getattr(update, "message", None) #get info of message
     msg_id = update_msg.message_id #get recently message id
     
-    userName = update.effective_user['first_name']
     user_id = update.effective_user['id'] #get user id
     text = update.message.text #get message sent to the bot    
     logger.info(f"El usuario {userName}, ha enviado un mensaje de texto. {text} groupid {groupId}")
@@ -125,7 +125,7 @@ async def responseText(bot, text, groupId, msg_id, userName):
                 text = f'El mensaje de <b>{userName}</b> ha sido eliminado porque tenia palabras ofensivas o caracteres desconocidos.'
         )
     
-    await searchErrorCommand(bot, text, groupId, msg_id, userName)
+    #await searchErrorCommand(bot, text, groupId, msg_id, userName)
 
 async def searchErrorCommand(bot, text, groupId, msg_id, userName):
     reg = re.compile('^/[a-zA-Z]0-9@]')
