@@ -80,10 +80,12 @@ async def newUsers(update, context: ContextTypes.DEFAULT_TYPE):
     #text = update.message.text #get message sent to the bot    
     #logger.info(f"{userName}, ha enviado un mensaje de texto. {text} groupid {groupId}")
     await storeUser(user_id, username)
+
+    text_es = f'Bienvenido {name} a la comunidad The Key of True!, usted puede acceder a <a href="https://x6nge.io">X6NGE</a> para obtener los <b>Token del Airdrop</b> en curso, el código llegara a la cuenta <a href="https://t.me/TKT_VerificationCode">TKT_VerificationCode</a> una ves verifique su usuario en el airdrop, para mas informacion utilice los comandos: /airdrop para consultar el estado de su registro, /help para obtener ayuda sobre los pasos a seguir para el airdrop,  /link los link de nuestras redes sociales y paginas, /contract para obtener el smart contract de TKT, /metamask para obtener la ayuda para vincular el smart contract a MetaMask.'
     await bot.sendMessage(
         chat_id=groupId,
         parse_mode="HTML",
-        text = f'<b>¡Welcome {name} to The Key of True! community. You can access <a href="https://x6nge.io">X6NGE</a> to obtain the tokens for the ongoing Airdrop</b>.'
+        text = text_es
     )
     lastsms = getLastSms(groupId, 0)
     if lastsms:
@@ -121,8 +123,8 @@ async def airdrop(update, context: CallbackContext):
                 await deleteMessage(bot, groupId, row[0])
 
     if isvalid == "user_ok":
-        text_en = f'{userName}, you have successfully registered, you can go to <a href="https://x6nge.io">X6NGE</a> to get the tokens for the ongoing Airdrop, the code will reach the @TKT_VerificationCode account once you verify your username in the airdrop, for more information use the commands: /airdrop to check the status of your registration, /help to get help on the steps to follow for the airdrop, /link the links to our social networks and pages. /contract to obtain the tkt smart contract.'
-        text_es = f'{userName}, Usted se ha registrado correctamente, puede acceder a <a href="https://x6nge.io">X6NGE</a> para obtener los <b>Token del Airdrop</b> en curso, el codigo llegara a la cuenta @TKT_VerificationCode una ves verifique su usuario en el airdrop, para mas informacion utilice los comandos: /airdrop para consultar el estado de su registro, /help para obtener ayuda sobre los pasos a seguir para el airdrop,  /link los link de nuestras redes sociales y paginas./contract para obtener el smart contract de TKT.'
+        text_en = f'{userName}, you have successfully registered, you can go to <a href="https://x6nge.io">X6NGE</a> to get the tokens for the ongoing Airdrop, the code will reach the <a href="https://t.me/TKT_VerificationCode">TKT_VerificationCode</a> account once you verify your username in the airdrop, for more information use the commands: /airdrop to check the status of your registration, /help to get help on the steps to follow for the airdrop, /link the links to our social networks and pages. /contract to obtain the tkt smart contract.'
+        text_es = f'{userName}, Usted se ha registrado correctamente, puede acceder a <a href="https://x6nge.io">X6NGE</a> para obtener los <b>Token del Airdrop</b> en curso, el código llegara a la cuenta <a href="https://t.me/TKT_VerificationCode">TKT_VerificationCode</a> una ves verifique su usuario en el airdrop, para mas informacion utilice los comandos: /airdrop para consultar el estado de su registro, /help para obtener ayuda sobre los pasos a seguir para el airdrop,  /link los link de nuestras redes sociales y paginas, /contract para obtener el smart contract de TKT, /metamask para obtener la ayuda para vincular el smart contract a MetaMask.'
         
         await bot.sendMessage(
             chat_id=groupId,
@@ -130,8 +132,8 @@ async def airdrop(update, context: CallbackContext):
             text = text_es
         )
     elif isvalid == "user_register":
-        text_en = f'{userName}, you have already registered previously, you can go to <a href="https://x6nge.io">X6NGE</a> to get the <b>Airdrop tokens.</b>, the code will reach the @TKT_VerificationCode account once you verify your username in the airdrop, for more information use the commands: /airdrop to check the status of your registration, /help to get help on the steps to follow for the airdrop, /link the links to our social networks and pages. /contract to obtain the tkt smart contract.'
-        text_es = f'{userName}, usted se ha registrado con anterioridad, puede acceder a <a href="https://x6nge.io">X6NGE</a> para obtener los <b>Token del Airdrop</b> en curso, el codigo llegara a la cuenta @TKT_VerificationCode una ves verifique su usuario en el airdrop, para mas informacion utilice los comandos: /airdrop para consultar el estado de su registro, /help para obtener ayuda sobre los pasos a seguir para el airdrop,  /link los link de nuestras redes sociales y paginas./contract para obtener el smart contract de TKT.'
+        text_en = f'{userName}, you have already registered previously, you can go to <a href="https://x6nge.io">X6NGE</a> to get the <b>Airdrop tokens.</b>, the code will reach the <a href="https://t.me/TKT_VerificationCode">TKT_VerificationCode</a> account once you verify your username in the airdrop, for more information use the commands: /airdrop to check the status of your registration, /help to get help on the steps to follow for the airdrop, /link the links to our social networks and pages. /contract to obtain the tkt smart contract.'
+        text_es = f'{userName}, usted se ha registrado con anterioridad, puede acceder a <a href="https://x6nge.io">X6NGE</a> para obtener los <b>Token del Airdrop</b> en curso, el código llegara a la cuenta <a href="https://t.me/TKT_VerificationCode">TKT_VerificationCode</a> una ves verifique su usuario en el airdrop, para mas informacion utilice los comandos: /airdrop para consultar el estado de su registro, /help para obtener ayuda sobre los pasos a seguir para el airdrop,  /link los link de nuestras redes sociales y paginas, /contract para obtener el smart contract de TKT, /metamask para obtener la ayuda para vincular el smart contract a MetaMask.'
         
         await bot.sendMessage(
             chat_id=groupId,
@@ -347,7 +349,7 @@ async def searchErrorCommand(bot, text, groupId, msg_id, username):
         await bot.sendMessage(
             chat_id=groupId,
             parse_mode="HTML",
-            text = f'{username}, el {cmd1.group()} commando esta mal escrito, le falta el /, los comandos son: /airdrop para consultar el estado de su registro, /help para obtener ayuda sobre los pasos a seguir para el airdrop,  /link los link de nuestras redes sociales y paginas. /contrat para obtener el smart contract de TKT.'
+            text = f'{username}, el {cmd1.group()} commando esta mal escrito, le falta el /, los comandos son: /airdrop para consultar el estado de su registro, /help para obtener ayuda sobre los pasos a seguir para el airdrop,  /link los link de nuestras redes sociales y paginas. /contrat para obtener el smart contract de TKT, /metamask para obtener la ayuda para vincular el smart contract a MetaMask.'
         )
         lastsms = getLastSms(groupId, 2)
         if lastsms:
@@ -361,7 +363,7 @@ async def searchErrorCommand(bot, text, groupId, msg_id, username):
         await bot.sendMessage(
             chat_id=groupId,
             parse_mode="HTML",
-            text = f'{username}, el {cmd2.group()} commando esta mal escrito, le falta el /, los comandos son: /airdrop para consultar el estado de su registro, /help para obtener ayuda sobre los pasos a seguir para el airdrop,  /link los link de nuestras redes sociales y paginas./contract para obtener el smart contract de TKT.'
+            text = f'{username}, el {cmd2.group()} commando esta mal escrito, le falta el /, los comandos son: /airdrop para consultar el estado de su registro, /help para obtener ayuda sobre los pasos a seguir para el airdrop,  /link los link de nuestras redes sociales y paginas, /contract para obtener el smart contract de TKT, /metamask para obtener la ayuda para vincular el smart contract a MetaMask.'
         )
         lastsms = getLastSms(groupId, 2)
         if lastsms:
@@ -375,7 +377,7 @@ async def searchErrorCommand(bot, text, groupId, msg_id, username):
         await bot.sendMessage(
             chat_id=groupId,
             parse_mode="HTML",
-            text = f'{username}, el {cmd3.group()} commando esta mal escrito, los comandos son: /airdrop para consultar el estado de su registro, /help para obtener ayuda sobre los pasos a seguir para el airdrop,  /link los link de nuestras redes sociales y paginas./contract para obtener el smart contract de TKT.'
+            text = f'{username}, el {cmd3.group()} commando esta mal escrito, los comandos son: /airdrop para consultar el estado de su registro, /help para obtener ayuda sobre los pasos a seguir para el airdrop,  /link los link de nuestras redes sociales y paginas, /contract para obtener el smart contract de TKT, /metamask para obtener la ayuda para vincular el smart contract a MetaMask.'
         )
         lastsms = getLastSms(groupId, 2)
         if lastsms:
@@ -394,7 +396,7 @@ async def searchHelp(bot, text, groupId, msg_id, username):
         await bot.sendMessage(
             chat_id=groupId,
             parse_mode="HTML",
-            text = f'{username}, el {cmd1.group()} commando esta mal escrito, los comandos son: /airdrop para consultar el estado de su registro, /help para obtener ayuda sobre los pasos a seguir para el airdrop,  /link los link de nuestras redes sociales y paginas./contract para obtener el smart contract de TKT.'
+            text = f'{username}, el {cmd1.group()} commando esta mal escrito, los comandos son: /airdrop para consultar el estado de su registro, /help para obtener ayuda sobre los pasos a seguir para el airdrop,  /link los link de nuestras redes sociales y paginas, /contract para obtener el smart contract de TKT, /metamask para obtener la ayuda para vincular el smart contract a MetaMask.'
         )
         lastsms = getLastSms(groupId, 2)
         if lastsms:
@@ -408,7 +410,7 @@ async def searchHelp(bot, text, groupId, msg_id, username):
         await bot.sendMessage(
             chat_id=groupId,
             parse_mode="HTML",
-            text = f'{username}, el {cmd2.group()} commando esta mal escrito, los comandos son: /airdrop para consultar el estado de su registro, /help para obtener ayuda sobre los pasos a seguir para el airdrop,  /link los link de nuestras redes sociales y paginas./contract para obtener el smart contract de TKT.'
+            text = f'{username}, el {cmd2.group()} commando esta mal escrito, los comandos son: /airdrop para consultar el estado de su registro, /help para obtener ayuda sobre los pasos a seguir para el airdrop,  /link los link de nuestras redes sociales y paginas, /contract para obtener el smart contract de TKT, /metamask para obtener la ayuda para vincular el smart contract a MetaMask.'
         )
         lastsms = getLastSms(groupId, 2)
         if lastsms:
