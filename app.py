@@ -6,7 +6,7 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, Updater, CommandHandler, MessageHandler, filters
 #Updater, receive messages from telegram to process that
 
-from config.config import config, changeMsg, airdrop, newUsers, echo
+from config.config import config, changeMsg, airdrop, newUsers, echo, cmd_help_3, cmd_contract_4, cmd_link_5
 
 #configure logging
 logging.basicConfig(#WARNING
@@ -61,6 +61,9 @@ application = ApplicationBuilder().token(TOKEN).build()
 
 #create handler
 application.add_handler(CommandHandler('airdrop', airdrop))
+application.add_handler(CommandHandler('help', cmd_help_3))
+application.add_handler(CommandHandler('contract', cmd_contract_4))
+application.add_handler(CommandHandler('link', cmd_link_5))
 application.add_handler(CommandHandler('changeMsg', changeMsg))
 application.add_handler(MessageHandler(filters.TEXT, echo)) #waiting for text input in chat
 application.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, newUsers)) #getting new members
