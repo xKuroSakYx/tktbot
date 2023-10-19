@@ -557,7 +557,7 @@ def getLastSms(chatid, tipo):
         if(userlist is not None):
             for row in userlist:
                 print(row)
-                cur.execute( "DELETE FROM lastmensage WHERE chatid=%s and tipo=%s", (row[0], tipo) )
+                cur.execute( "DELETE FROM LastMensage WHERE chatid=%s and tipo=%s", (row[0], tipo) )
                 conexion.commit()
             return userlist
         else:
