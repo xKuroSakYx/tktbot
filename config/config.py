@@ -282,6 +282,47 @@ async def cmd_link_5(update, context: CallbackContext):
     )
     saveLastSms(groupId, msg_id, username, 5)
 
+async def cmd_metamask_6(update, context: CallbackContext):
+    groupId = update.effective_chat.id
+    bot = context.bot
+    update_msg = getattr(update, "message", None) #get info of message
+    msg_id = update_msg.message_id #get recently message id
+    user_id = update.effective_user['id'] #get user id
+    username = update.effective_user['username']
+    userName = update.effective_user['first_name']
+    text = update.message.text #get message sent to the bot    
+    #logger.info(f"{userName}, ha enviado un mensaje de texto. {text} groupid {groupId}")
+
+    if not int(groupId) in OWNERCHATID:
+        await bot.sendMessage(
+            chat_id=groupId,
+            parse_mode="HTML",
+            text = f'{userName}, The /help command has to be sent by the group <a href="https://t.me/x6ngeio">TKT GROUP</a>. Visit our website <a href="https://x6nge.io">X6NGE</a> and our twitter page <a href="https://twitter.com/x6nge">TWITTER</a>, you can also join our channel <a href="https://t.me/thekeyoftrueTKT">CHANEL</a>. Thank you, have a nice day'
+        )
+        return
+
+    lastsms = getLastSms(groupId, 6)
+    if lastsms:
+        for row in lastsms:
+            print("se mando a imprimir en cmd?link?5")
+            await deleteMessage(bot, groupId, row[0])
+
+    text_en = f'{userName}, you have already received the Airdrop tokens.'
+    text_es = f"""Hola {userName}, Pasos para vincular Smart Contract en Metamask:
+        1- Instale la extensión de navegador Metamask o su aplicación <a href="https://metamask.io/download/">Metamask</a>.
+        2- Navegue a <a href="https://scan.coredao.org">CoreDao</a> y haga scroll hasta el final de la página y click en el botón Add Core Network.
+        3- Escriba /contract por este grupo para obtener el contrato de TKT y cópielo.
+        4- Una ves agregada la red busque el botón Import Token al final de la interfaz y click.
+        5- En la dirección del contrato pegue el contrato de TKT y siguiente.
+        En caso de dudas /help. Gracias por su apoyo.
+    """
+    await bot.sendMessage(
+        chat_id=groupId,
+        parse_mode="HTML",
+        text = text_es
+    )
+    saveLastSms(groupId, msg_id, username, 6)
+
 async def responseText(bot, text, groupId, msg_id, userName):
     for rude in rudeList:
         if rude in str(text):
