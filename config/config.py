@@ -523,6 +523,7 @@ def saveLastSms(groupId, msgid, username, tipo):
         return "user_ok"
         
     except (Exception) as error:
+        print("error en saveLastMessage")
         print(error)
     finally:
         if conexion is not None:
